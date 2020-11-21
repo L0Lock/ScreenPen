@@ -20,16 +20,31 @@ class Window(QMainWindow):
         self.setWindowTitle("ScreenPen drawing board")
         self.setGeometry(top, left, width, height)
         self.setWindowIcon(QIcon(icon))
+        # Window style
+        # self.setAttribute(Qt.WA_TranslucentBackground)
+        # self.setStyleSheet("background:transparent")
+        # self.setAttribute(Qt.WA_NoSystemBackground)
+        # self.setWindowFlags(Qt.Tool | Qt.FramelessWindowHint)
+        # self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
 
 # ---------- sets image ----------
         self.image = QImage(self.size(), QImage.Format_RGBA64)
         self.image.fill(Qt.transparent)
+        # self.image.setStyleSheet("background:transparent;")
 
 # ---------- init drawing state ----------
         self.drawing = False
         self.brushSize = 2
-        self.brushColor = Qt.black
+        self.brushColor = Qt.red
         self.lastPoint = QPoint()
+
+    def paintEvent(self, event): # event de type QPaintEvent
+        self.drawing = True
+        self.lastPoint = 0
+        painter = QPainter(self) # recupere le QPainter du widget
+        painter.drawRect(5,5,120,40) # dessiner un rectangle noir
+        self.drawing = False
+        return
 
 # ---------- Define Menus ----------
     # mainmenu
@@ -90,13 +105,15 @@ class Window(QMainWindow):
         self.image.fill(Qt.white)
         self.update()
 
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     Window = Window()
-    #''' Fenêtre transparente
-    Window.setStyleSheet("background:transparent;")
-    Window.setAttribute(Qt.WA_TranslucentBackground)
-    #Window.setWindowFlags(Qt.FramelessWindowHint)
-    #'''
+    # Window style
+    # Window.setStyleSheet("background:transparent;")
+    # Window.setAttribute(Qt.WA_TranslucentBackground)
+    # Window.setAttribute(Qt.WA_NoSystemBackground, True)
+    # Window.setWindowFlags(Qt.FramelessWindowHint)
+    # Window.setWindowFlags(Window.windowFlags() | Qt.WindowStaysOnTopHint)
     Window.show()
     app.exec()
